@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/loanApplication/loanApplication.iml" filepath="$PROJECT_DIR$/loanApplication/loanApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/n11-talenthub-bootcamp-graduation-project-uveyss.iml" filepath="$PROJECT_DIR$/.idea/n11-talenthub-bootcamp-graduation-project-uveyss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/n11LoanApplication/n11LoanApplication.iml" filepath="$PROJECT_DIR$/n11LoanApplication/n11LoanApplication.iml" />
+    </modules>
+  </component>
+</project>
