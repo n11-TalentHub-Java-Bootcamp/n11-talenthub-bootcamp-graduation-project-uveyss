@@ -3,15 +3,14 @@ package com.lns.n11loanapplication.service;
 import com.lns.n11loanapplication.api.errorHandling.exception.BusinessException;
 import com.lns.n11loanapplication.converter.UserConverter;
 import com.lns.n11loanapplication.dao.UserDao;
+import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.data.dto.UserDto;
 import com.lns.n11loanapplication.data.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
-@Transactional
 public class UserService {
 @Autowired
     UserDao userDao;
@@ -37,7 +36,6 @@ public class UserService {
     public UserDto save (UserDto userDto)
     {
         User user = UserConverter.INSTANCE.userDtoConvertToUser(userDto);
-        user.setUserId();
         user = userDao.save(user);
         return UserConverter.INSTANCE.userConvertToUserDto(user);
     }
@@ -45,5 +43,15 @@ public class UserService {
     public void delete (Long id)
     {
         userDao.deleteById(id);
+    }
+
+    public UserCreditDto findUserForCreditByTckn(Long tckn)
+    {
+        UserDto userDto = findByUserTckn(tckn);
+        return UserConverter.INSTANCE.userDtoConvertToUserCreditDto(userDto);
+    }
+    public void deleteAll()
+    {
+        userDao.deleteAll();
     }
 }

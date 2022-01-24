@@ -30,4 +30,8 @@ UserRepository userRepository;
     {
         return userRepository.findByUserTckn(userTckn);
     }
+    public void deleteAll()
+    {
+        userRepository.deleteAll();
+    }
 }

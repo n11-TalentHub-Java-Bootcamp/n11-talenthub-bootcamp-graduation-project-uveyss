@@ -9,17 +9,20 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-
+@Table(name = "Credit" ,schema = "public" )
+@SequenceGenerator(schema = "public",name = "generator",sequenceName = "credit_id_seq")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Credit implements Serializable {
     @Id
-    @GeneratedValue(generator = "generator")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long creditId;
 
     @Column(name = "requestDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestDate;
     @Column(name = "userTckn" ,nullable = false)
-    private Long user;
+    private Long userTckn;
     @Column(name = "birthDate" ,nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date birthDate;
@@ -28,8 +31,7 @@ public class Credit implements Serializable {
     @Column(name = "creditStatus" ,nullable = false)
     private byte creditStatus;
 
-    @OneToOne(mappedBy = "credit", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "credit")
     private CreditDetail creditDetailId;
 
 
@@ -50,11 +52,11 @@ public class Credit implements Serializable {
     }
 
     public Long getUser() {
-        return user;
+        return userTckn;
     }
 
     public void setUser(Long user) {
-        this.user = user;
+        this.userTckn = user;
     }
     public Long getCreditId() {
         return creditId;
@@ -65,11 +67,11 @@ public class Credit implements Serializable {
     }
 
     public Long getUserTckn() {
-        return user;
+        return userTckn;
     }
 
     public void setUserTckn(Long userTckn) {
-        this.user = userTckn;
+        this.userTckn = userTckn;
     }
 
     public Date getRequestDate() {

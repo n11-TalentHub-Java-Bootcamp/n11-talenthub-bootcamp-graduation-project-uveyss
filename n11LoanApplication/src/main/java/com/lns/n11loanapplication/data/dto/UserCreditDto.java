@@ -20,6 +20,15 @@ public class UserCreditDto implements Serializable {
     private byte creditStatus;
     private Date creditApprovalDate;
     private Long creditScore ;
+    private BigDecimal montlyIncome;
+
+    public BigDecimal getMontlyIncome() {
+        return montlyIncome;
+    }
+
+    public void setMontlyIncome(BigDecimal montlyIncome) {
+        this.montlyIncome = montlyIncome;
+    }
 
     public Long getCreditScore() {
         return creditScore;

@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
 
 @Document(collection = "user")
 public class User {
@@ -35,8 +34,8 @@ public class User {
         return userId;
     }
 
-    public void setUserId() {
-        this.userId = UUID.randomUUID().toString();
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public BigDecimal getColleteralAmount() {

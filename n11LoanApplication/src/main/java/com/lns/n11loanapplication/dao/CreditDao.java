@@ -34,4 +34,9 @@ public class CreditDao {
     {
         creditRepository.deleteById(id);
     }
+
+    public void deleteAll()
+    {
+        creditRepository.deleteAll();
+    }
 }

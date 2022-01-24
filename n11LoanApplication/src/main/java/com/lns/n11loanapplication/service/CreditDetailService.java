@@ -1,14 +1,12 @@
 package com.lns.n11loanapplication.service;
 
 
-import com.lns.n11loanapplication.converter.UserCreditConverter;
+import com.lns.n11loanapplication.converter.CreditDetailConverter;
 import com.lns.n11loanapplication.dao.CreditDetailDao;
-import com.lns.n11loanapplication.data.dto.UserCreditDto;
+import com.lns.n11loanapplication.data.dto.CreditDetailDto;
 import com.lns.n11loanapplication.data.entity.CreditDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CreditDetailService {
@@ -17,23 +15,13 @@ public class CreditDetailService {
     CreditDetailDao creditDetailDao;
 
 
-    public List<UserCreditDto> findAll()
-    {
-        List<CreditDetail> userList =creditDetailDao.findAll();
-        return UserCreditConverter.INSTANCE.creditDetailListConvertToUserCreditDtoList(userList);
-    }
 
-    public UserCreditDto findByCreditId(Long id)
-    {
-        CreditDetail creditDetail= creditDetailDao.findByCreditId(id);
-        return UserCreditConverter.INSTANCE.creditDetailConvertToUserCreditDto(creditDetail);
-    }
 
-    public UserCreditDto save (UserCreditDto userCreditDto)
+    public void save (CreditDetailDto userCreditDto)
     {
-        CreditDetail creditDetail = UserCreditConverter.INSTANCE.userCreditDtoConvertToCreditDetail(userCreditDto);
+        CreditDetail creditDetail = CreditDetailConverter.INSTANCE.creditDetailDtoConvertToCreditDetail(userCreditDto);
         creditDetail=creditDetailDao.save(creditDetail);
-        return  UserCreditConverter.INSTANCE.creditDetailConvertToUserCreditDto(creditDetail);
+        CreditDetailConverter.INSTANCE.creditDetaiConvertToCreditDetaiDto(creditDetail);
     }
 }
 

@@ -15,12 +15,10 @@ import java.util.Date;
 public class CreditDetail implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "generator")
-    @Column(name = "creditDetailId" ,nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long creditDetailId;
 
-    @OneToOne
-    @MapsId
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creditId")
     private Credit credit;
 
@@ -46,13 +44,6 @@ public class CreditDetail implements Serializable {
         this.creditDetailId = creditDetailId;
     }
 
-    public Credit getCreditId() {
-        return credit;
-    }
-
-    public void setCreditId(Credit creditId) {
-        this.credit = creditId;
-    }
 
     public BigDecimal getCreditAmount() {
         return creditAmount;

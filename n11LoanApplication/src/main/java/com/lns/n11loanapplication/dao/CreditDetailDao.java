@@ -30,5 +30,9 @@ public class CreditDetailDao {
     {
         return creditDetailRepository.save(creditDetail);
     }
+    public void deleteAll()
+    {
+        creditDetailRepository.deleteAll();
+    }
 }
 
