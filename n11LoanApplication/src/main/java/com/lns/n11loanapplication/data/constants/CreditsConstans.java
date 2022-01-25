@@ -11,6 +11,11 @@ public  class CreditsConstans
     private static final BigDecimal creditLimitRate= BigDecimal.valueOf(4);
     private static final BigDecimal highLevelCollateralRate = BigDecimal.valueOf(0.25);
     private static final BigDecimal creditLimitRange = BigDecimal.valueOf(2);
+    private static final String creditLimitResultMessage="kredi başvurunuz olumlu sonuçlanmıştır. \n Limitiniz: ";
+
+    public static String getCreditLimitResultMessage() {
+        return creditLimitResultMessage;
+    }
 
     public static BigDecimal getLowCreditLimit() {
         return lowCreditLimit;

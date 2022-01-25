@@ -1,4 +1,4 @@
-package com.lns.n11loanapplication.service.CreditLimit;
+package com.lns.n11loanapplication.service.creditLimit;
 
 import java.math.BigDecimal;
 

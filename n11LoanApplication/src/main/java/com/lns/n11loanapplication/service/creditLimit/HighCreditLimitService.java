@@ -1,7 +1,6 @@
-package com.lns.n11loanapplication.service.CreditLimit;
+package com.lns.n11loanapplication.service.creditLimit;
 
 import com.lns.n11loanapplication.data.constants.CreditsConstans;
-import com.lns.n11loanapplication.data.dto.UserCreditDto;
 
 import java.math.BigDecimal;
 

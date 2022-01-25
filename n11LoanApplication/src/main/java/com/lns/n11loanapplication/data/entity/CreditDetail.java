@@ -18,7 +18,7 @@ public class CreditDetail implements Serializable {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long creditDetailId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creditId")
     private Credit credit;
 

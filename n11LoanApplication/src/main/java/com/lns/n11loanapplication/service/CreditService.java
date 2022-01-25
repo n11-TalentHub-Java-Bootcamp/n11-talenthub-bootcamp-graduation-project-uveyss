@@ -10,7 +10,7 @@ import com.lns.n11loanapplication.data.dto.CreditDetailDto;
 import com.lns.n11loanapplication.data.dto.CreditDto;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.data.entity.Credit;
-import com.lns.n11loanapplication.service.CreditLimit.*;
+import com.lns.n11loanapplication.service.creditLimit.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class CreditService {
     UserService userService;
 
 
-
+//TODO:Entity servisi ayrılacak. entity ile ilgili işlemler yapan metotlar entity service diye bir paketin içine alınacak.
     public CreditDto save (CreditDto creditDto)
     {
         Credit credit= CreditConverter.INSTANCE.creditDtoConvertToCredit(creditDto);

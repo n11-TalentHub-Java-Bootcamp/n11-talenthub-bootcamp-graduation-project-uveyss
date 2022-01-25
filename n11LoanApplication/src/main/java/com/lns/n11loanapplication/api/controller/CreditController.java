@@ -6,6 +6,8 @@ import com.lns.n11loanapplication.service.CreditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/credit/")
 public class CreditController {
@@ -17,6 +19,11 @@ public class CreditController {
     public ApiResponse deleteAll()
     {
          creditService.deleteAll();
+        return ApiResponse.success();
+    }
+    @GetMapping("/{tckn}/{birthDate}")
+    public ApiResponse findUserCredit(@PathVariable Long tckn, @PathVariable Date birthDate)
+    {
         return ApiResponse.success();
     }
 

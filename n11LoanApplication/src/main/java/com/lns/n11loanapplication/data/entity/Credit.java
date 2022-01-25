@@ -31,10 +31,6 @@ public class Credit implements Serializable {
     @Column(name = "creditStatus" ,nullable = false)
     private byte creditStatus;
 
-    @OneToOne(mappedBy = "credit")
-    private CreditDetail creditDetailId;
-
-
     public byte getCreditStatus() {
         return creditStatus;
     }
