@@ -13,8 +13,14 @@ public  class CreditsConstans
     private static final BigDecimal creditLimitRange = BigDecimal.valueOf(2);
     private static final String creditLimitResultMessage="kredi başvurunuz olumlu sonuçlanmıştır. \n Limitiniz: ";
 
+    private static final String creditLimitResult="tckn ye Kredi limiti atanmıştır. ";
+
     public static String getCreditLimitResultMessage() {
         return creditLimitResultMessage;
+    }
+
+    public static String getCreditLimitResult() {
+        return creditLimitResult;
     }
 
     public static BigDecimal getLowCreditLimit() {

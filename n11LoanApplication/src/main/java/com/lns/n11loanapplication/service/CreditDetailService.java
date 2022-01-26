@@ -19,6 +19,7 @@ public class CreditDetailService {
 
     public void save (CreditDetailDto userCreditDto)
     {
+
         CreditDetail creditDetail = CreditDetailConverter.INSTANCE.creditDetailDtoConvertToCreditDetail(userCreditDto);
         creditDetail=creditDetailDao.save(creditDetail);
         CreditDetailConverter.INSTANCE.creditDetaiConvertToCreditDetaiDto(creditDetail);

@@ -15,6 +15,8 @@ public class Consumer {
 
     @Value("${kafka.topic.calculateCreditScore}")
     private String calculateCreditScore;
+    @Value("${kafka.topic.calculateCreditScoreRetry}")
+    private String calculateCreditScoreRetry;
 
     @Value("sendCreditLimitResultByEmail")
     private String sendCreditLimitResultByEmail;
@@ -26,7 +28,15 @@ public class Consumer {
     }
 
     public void publishCalculateCreditScoreEvent(String userTckn) {
-        kafkaTemplate.send(calculateCreditScore, UUID.randomUUID().toString(), userTckn);
+         String messageId=UUID.randomUUID().toString();
+        try {
+            kafkaTemplate.send(calculateCreditScore, messageId, userTckn);
+        }
+        catch (Exception listenerException)
+        {
+         kafkaTemplate.send(calculateCreditScoreRetry,messageId);
+        }
+
     }
 
 

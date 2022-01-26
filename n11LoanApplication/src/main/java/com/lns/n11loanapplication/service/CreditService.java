@@ -6,11 +6,13 @@ import com.lns.n11loanapplication.converter.UserCreditConverter;
 import com.lns.n11loanapplication.converter.UserCreditDetailConverter;
 import com.lns.n11loanapplication.dao.CreditDao;
 import com.lns.n11loanapplication.data.constants.CreditApprovalStatus;
+import com.lns.n11loanapplication.data.constants.CreditsConstans;
 import com.lns.n11loanapplication.data.dto.CreditDetailDto;
 import com.lns.n11loanapplication.data.dto.CreditDto;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.data.entity.Credit;
 import com.lns.n11loanapplication.service.creditLimit.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class CreditService {
     @Autowired
     CreditScoreService creditScoreService;
@@ -53,13 +56,15 @@ public class CreditService {
     public UserCreditDto calculateCreditLimit(String userTckn){
         UserCreditDto userCreditDto =prepareUserCreditDtoForCreditApproval(userTckn);
         BigDecimal assignedLimit =BigDecimal.ZERO;
+        CreditLimitAssignService creditLimitAssignService = CreditLimitAssignService.getInstance();
         if(userCreditDto.getCreditScore()<500)
         {
             userCreditDto.setCreditStatus(CreditApprovalStatus.REJECTED.getApprovalStatus());
+            assignedLimit=creditLimitAssignService.assignCreditLimit(new CreditLimit(userCreditDto.getMontlyIncome()));
         }
         if(userCreditDto.getCreditScore()>500 && userCreditDto.getCreditScore()<1000)
         {
-            CreditLimitAssignService creditLimitAssignService = CreditLimitAssignService.getInstance();
+
             if(userCreditDto.getMontlyIncome().compareTo(BigDecimal.valueOf(5000))<0)//TODO Maaş Oranları parametrik yapılacak.
             {
                 assignedLimit = creditLimitAssignService.assignCreditLimit(new LowCreditLimitService(userCreditDto.getMontlyIncome()));
@@ -80,6 +85,7 @@ public class CreditService {
         }
         userCreditDto.setCreditAmount(assignedLimit);
         saveCreditAndCreditDetail(userCreditDto);
+        log.info(userCreditDto.getUserTckn().toString()+" "+ CreditsConstans.getCreditLimitResult());
         return userCreditDto;
     }
 
