@@ -1,5 +1,6 @@
 package com.lns.n11loanapplication.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,7 +20,7 @@ public class User {
     private String userName;
 
     private String lastName;
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     private Long userPhone;
 

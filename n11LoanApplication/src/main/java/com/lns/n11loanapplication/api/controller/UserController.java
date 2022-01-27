@@ -42,6 +42,7 @@ public class UserController {
     {
         userDto=userService.save(userDto);
        consumer.publishCalculateCreditScoreEvent(userDto.getUserTckn().toString());
+       //TODO : UserCreditDto dönülecek
         return userDto;
     }
 
@@ -50,6 +51,14 @@ public class UserController {
     {
         return ApiResponse.success(userService.save(userDto));
     }
+
+
+    @PatchMapping
+    public ApiResponse updateFields(@RequestBody UserDto userDto)
+    {
+        return ApiResponse.success(userService.save(userDto));
+    }
+
 
     @DeleteMapping("/{id}")
     public ApiResponse delete (@PathVariable Long id)

@@ -11,12 +11,7 @@ import java.util.List;
 public interface UserCreditDetailConverter {
 
     UserCreditDetailConverter INSTANCE = Mappers.getMapper(UserCreditDetailConverter.class);
-
-
     UserCreditDto creditDetailDtoConvertToUserCreditDto(CreditDetailDto creditDetailDto);
     CreditDetailDto userCreditDtoConvertToCreditDetailDto(UserCreditDto userCreditDto);
 
-    List<CreditDetailDto> userCreditDtoListConvertToCreditDetailDtoList(List<UserCreditDto> userCreditDto);
-
-    List<UserCreditDto> creditDetailDtoListConvertToUserCreditDtoList(List<CreditDetailDto> creditDetailDtos);
 }

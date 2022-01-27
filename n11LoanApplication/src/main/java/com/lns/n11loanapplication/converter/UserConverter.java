@@ -18,8 +18,6 @@ public interface UserConverter {
     UserDto userConvertToUserDto(User user);
     User userDtoConvertToUser(UserDto userDto);
     List<UserDto> userListConvertToUserDtoList(List<User> users);
-    List<User> userDtoConvertToUser(List<UserDto> userDtoList);
-    UserDto userCreditDtoConvertToUserDto (UserCreditDto userCreditDto);
     UserCreditDto userDtoConvertToUserCreditDto (UserDto userDto);
 
 

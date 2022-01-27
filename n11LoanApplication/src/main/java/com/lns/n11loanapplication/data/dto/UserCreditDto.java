@@ -1,5 +1,6 @@
 package com.lns.n11loanapplication.data.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,26 @@ import java.util.Date;
 @Builder
 public class UserCreditDto implements Serializable {
     private Long userTckn;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private Date requestDate;
     private BigDecimal creditAmount;
     private BigDecimal colleteralAmount;
     private byte creditStatus;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private Date creditApprovalDate;
     private Long creditScore ;
     private BigDecimal montlyIncome;
+    private Long userPhone;
+
+    public Long getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(Long userPhone) {
+        this.userPhone = userPhone;
+    }
 
     public BigDecimal getMontlyIncome() {
         return montlyIncome;

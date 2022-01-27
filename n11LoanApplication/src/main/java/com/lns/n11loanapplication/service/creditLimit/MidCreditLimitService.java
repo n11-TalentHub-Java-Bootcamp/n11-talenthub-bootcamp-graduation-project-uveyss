@@ -1,7 +1,6 @@
 package com.lns.n11loanapplication.service.creditLimit;
 
 import com.lns.n11loanapplication.data.constants.CreditsConstans;
-
 import java.math.BigDecimal;
 
 public class MidCreditLimitService extends CreditLimit{

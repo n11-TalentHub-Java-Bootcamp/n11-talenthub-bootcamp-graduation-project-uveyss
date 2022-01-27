@@ -1,10 +1,11 @@
 package com.lns.n11loanapplication.service;
 
 
+import com.lns.n11loanapplication.api.errorHandling.exception.BusinessException;
+import com.lns.n11loanapplication.api.errorHandling.exception.NotFoundException;
 import com.lns.n11loanapplication.converter.CreditConverter;
 import com.lns.n11loanapplication.converter.UserCreditConverter;
 import com.lns.n11loanapplication.converter.UserCreditDetailConverter;
-import com.lns.n11loanapplication.dao.CreditDao;
 import com.lns.n11loanapplication.data.constants.CreditApprovalStatus;
 import com.lns.n11loanapplication.data.constants.CreditsConstans;
 import com.lns.n11loanapplication.data.dto.CreditDetailDto;
@@ -12,6 +13,7 @@ import com.lns.n11loanapplication.data.dto.CreditDto;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.data.entity.Credit;
 import com.lns.n11loanapplication.service.creditLimit.*;
+import com.lns.n11loanapplication.service.entityService.CreditEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,22 +27,33 @@ public class CreditService {
     @Autowired
     CreditScoreService creditScoreService;
 
-    @Autowired
-    CreditDao creditDao;
+
 
     @Autowired
     CreditDetailService creditDetailService;
     @Autowired
     UserService userService;
 
+    @Autowired
+    CreditEntityService creditEntityService;
 
-//TODO:Entity servisi ayrılacak. entity ile ilgili işlemler yapan metotlar entity service diye bir paketin içine alınacak.
+
     public CreditDto save (CreditDto creditDto)
     {
-        Credit credit= CreditConverter.INSTANCE.creditDtoConvertToCredit(creditDto);
-        credit=creditDao.save(credit);
-        creditDto=CreditConverter.INSTANCE.creditConvertToCreditDto(credit);
-        return creditDto;
+
+        try
+        {
+                Credit credit= CreditConverter.INSTANCE.creditDtoConvertToCredit(creditDto);
+                credit=creditEntityService.save(credit);
+                creditDto=CreditConverter.INSTANCE.creditConvertToCreditDto(credit);
+                return creditDto;
+        }
+        catch (Exception ex)
+        {
+            log.error("save or update exception in CreditService",ex);
+            throw new BusinessException("CreditService's save methods has an exception ",ex.getLocalizedMessage());
+
+        }
     }
 
     public UserCreditDto prepareUserCreditDtoForCreditApproval(String userTckn)
@@ -50,6 +63,19 @@ public class CreditService {
         userCreditDto.setCreditScore(creditScore);
         userCreditDto.setRequestDate(new Date(System.currentTimeMillis()));
         return userCreditDto;
+    }
+
+    public UserCreditDto prepareUserCreditDtoForCreditApproval(Long tckn, Date birthDate)
+    {
+        Credit credit =findCreditApprovalByTcknAndBirthDate(tckn,birthDate);
+       CreditDto creditDto =CreditConverter.INSTANCE.creditConvertToCreditDto(credit);
+       CreditDetailDto creditDetailDto = creditDetailService.findByCreditId(creditDto.getCreditId());
+       UserCreditDto userCreditDto =UserCreditConverter.INSTANCE.creditDtoConvertToUserCreditDto(creditDto);
+       userCreditDto.setCreditAmount(creditDetailDto.getCreditAmount());
+       userCreditDto.setColleteralAmount(creditDetailDto.getColleteralAmount());
+       userCreditDto.setCreditApprovalDate(creditDetailDto.getCreditApprovalDate());
+       userCreditDto.setCreditScore(creditDetailDto.getCreditScore());
+       return userCreditDto;
     }
 
 
@@ -62,7 +88,7 @@ public class CreditService {
             userCreditDto.setCreditStatus(CreditApprovalStatus.REJECTED.getApprovalStatus());
             assignedLimit=creditLimitAssignService.assignCreditLimit(new CreditLimit(userCreditDto.getMontlyIncome()));
         }
-        if(userCreditDto.getCreditScore()>500 && userCreditDto.getCreditScore()<1000)
+        else if(userCreditDto.getCreditScore()<1000)
         {
 
             if(userCreditDto.getMontlyIncome().compareTo(BigDecimal.valueOf(5000))<0)//TODO Maaş Oranları parametrik yapılacak.
@@ -99,10 +125,14 @@ public class CreditService {
         creditDetailService.save(creditDetailDto);
     }
 
-    public void deleteAll()
+    public Credit findCreditApprovalByTcknAndBirthDate(Long tckn,Date birthDate)
     {
-        userService.deleteAll();
-        creditDao.deleteAll();
-        creditDetailService.creditDetailDao.deleteAll();
+        Credit credit=creditEntityService.findUserByTcknAndBirthDate(tckn,birthDate);
+        if(credit==null)
+        {
+            log.error("NOTFoundException: called method:\t findCreditApprovalByTcknAndBirthDate \n param1:"+tckn+" \n param2 "+birthDate );
+            throw new NotFoundException("user-not-found this tckn"+tckn+" and this birthDate"+birthDate, tckn);
+        }
+        return credit;
     }
 }

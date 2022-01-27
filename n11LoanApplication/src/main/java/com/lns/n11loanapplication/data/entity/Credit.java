@@ -1,6 +1,7 @@
 package com.lns.n11loanapplication.data.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,11 +21,13 @@ public class Credit implements Serializable {
 
     @Column(name = "requestDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date requestDate;
     @Column(name = "userTckn" ,nullable = false)
     private Long userTckn;
     @Column(name = "birthDate" ,nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
 

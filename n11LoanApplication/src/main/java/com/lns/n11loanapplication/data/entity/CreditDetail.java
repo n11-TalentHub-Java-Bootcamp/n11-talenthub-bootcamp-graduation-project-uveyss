@@ -1,5 +1,6 @@
 package com.lns.n11loanapplication.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class CreditDetail implements Serializable {
 
     @Column(name = "creditApprovalDate" ,nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private Date creditApprovalDate;
 
     public Long getCreditDetailId() {

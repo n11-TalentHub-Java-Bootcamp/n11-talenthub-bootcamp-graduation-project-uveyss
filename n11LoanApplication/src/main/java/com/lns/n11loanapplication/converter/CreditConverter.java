@@ -17,7 +17,4 @@ public interface CreditConverter {
 
     Credit creditDtoConvertToCredit(CreditDto creditDto);
 
-    List<CreditDto>creditListConvertToCreditDtoList(List<Credit> credits);
-
-    List<Credit> creditDtoListConvertToCreditList(List<CreditDto>creditDtos);
 }

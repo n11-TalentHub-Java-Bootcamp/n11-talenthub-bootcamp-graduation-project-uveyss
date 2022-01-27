@@ -5,6 +5,7 @@ import com.lns.n11loanapplication.repository.CreditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,12 @@ public class CreditDao {
     {
         Optional<Credit> credit =creditRepository.findById(id);
         return credit.orElse(null);
-        //TODO: null yerine farklı bir dönüş sağlanabilir.
+    }
+
+    public Credit findByTcknAndBirthDate(Long tckn, Date birthDate)
+    {
+       Credit credit= creditRepository.findCreditByUserTcknAndBirthDate(tckn,birthDate);
+       return credit;
     }
 
     public Credit save (Credit credit)
@@ -35,8 +41,4 @@ public class CreditDao {
         creditRepository.deleteById(id);
     }
 
-    public void deleteAll()
-    {
-        creditRepository.deleteAll();
-    }
 }

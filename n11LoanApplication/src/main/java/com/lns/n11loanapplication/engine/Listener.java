@@ -26,10 +26,20 @@ public class Listener {
     SendMailService sendMailService;
     @Autowired
     SendSmsService sendSmsService;
+    private  UserCreditDto userCreditDto;
+
+    public UserCreditDto getUserCreditDto() {
+        return userCreditDto;
+    }
+
+    public void setUserCreditDto(UserCreditDto userCreditDto) {
+        this.userCreditDto = userCreditDto;
+    }
 
     public Listener(CreditService creditService) {
         this.creditService = creditService;
     }
+
 
 
     @RetryableTopic(
@@ -40,9 +50,8 @@ public class Listener {
     @KafkaListener(topics = "${kafka.topic.calculateCreditScore}", groupId = "${kafka.groupId}")
     public void calculateCreditScoreListener(@Payload String userTckn) {
         try {
-                UserCreditDto userCreditDto = creditService.calculateCreditLimit(userTckn);
-                sendMailService.sendInformation("doganvey@outlook.com", CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
-                sendSmsService.sendInformation("5357479473", CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
+                 setUserCreditDto(creditService.calculateCreditLimit(userTckn));
+                 sendSmsService.sendInformation(userCreditDto.getUserPhone().toString(), CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
             }
             catch (Exception ex)
             {
@@ -52,7 +61,8 @@ public class Listener {
 
     @DltHandler
     public void dlt(String in, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-        log.info(in + " from " + topic);/*Yeni bir topic açılarak log gb olarak elastic search e basılabilir.*/
+        log.warn(in + " from " + topic);/*Yeni bir topic açılarak log gb olarak elastic search e basılabilir.*/
+        sendMailService.sendInformation(CreditsConstans.getKafkaAdminMail(), CreditsConstans.getSmsDidNotSend() + getUserCreditDto().getUserPhone());
     }
 
 }
