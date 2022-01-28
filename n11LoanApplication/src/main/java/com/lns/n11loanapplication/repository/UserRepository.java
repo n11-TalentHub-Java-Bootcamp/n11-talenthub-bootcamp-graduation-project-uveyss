@@ -9,4 +9,6 @@ public interface UserRepository extends MongoRepository<User,Long> {
 
     User findByUserTckn(Long tckn);
 
+
+    void deleteByUserTckn(Long tckn);
 }

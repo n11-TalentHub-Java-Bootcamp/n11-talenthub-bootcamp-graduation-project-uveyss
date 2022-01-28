@@ -68,4 +68,8 @@ public class UserService {
         UserDto userDto = findByUserTckn(tckn);
         return UserConverter.INSTANCE.userDtoConvertToUserCreditDto(userDto);
     }
+    public void deleteById(Long tckn)
+    {
+        userEntityService.deleteUserByTckn(tckn);
+    }
 }

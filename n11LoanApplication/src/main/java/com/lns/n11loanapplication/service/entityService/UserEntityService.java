@@ -37,4 +37,9 @@ public class UserEntityService {
     {
         return userDao.findUserById(id);
     }
+
+    public void deleteUserByTckn(Long tckn)
+    {
+        userDao.deleteByTckn(tckn);
+    }
 }

@@ -17,6 +17,7 @@ import com.lns.n11loanapplication.service.entityService.CreditEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -115,14 +116,25 @@ public class CreditService {
         return userCreditDto;
     }
 
-
+    @Transactional
     public void saveCreditAndCreditDetail(UserCreditDto userCreditDto)
     {
-        CreditDto creditDto= UserCreditConverter.INSTANCE.userCreditDtoConvertToCreditDto (userCreditDto);
-        creditDto=save(creditDto);
-        CreditDetailDto creditDetailDto= UserCreditDetailConverter.INSTANCE.userCreditDtoConvertToCreditDetailDto(userCreditDto);
-        creditDetailDto.setCredit(creditDto);
-        creditDetailService.save(creditDetailDto);
+        try
+        {
+            CreditDto creditDto= UserCreditConverter.INSTANCE.userCreditDtoConvertToCreditDto (userCreditDto);
+            creditDto=save(creditDto);
+            CreditDetailDto creditDetailDto= UserCreditDetailConverter.INSTANCE.userCreditDtoConvertToCreditDetailDto(userCreditDto);
+            creditDetailDto.setCredit(creditDto);
+            creditDetailService.save(creditDetailDto);
+        }
+        catch (Exception ex)
+        {
+            log.error("Kredi işlemi kayıt sırasında hata alındığı için user bilgisi silindi");
+            userService.deleteById(userCreditDto.getUserTckn());
+            log.error("Kredi işlemi kayıt sırasında hata alındığı için user bilgisi silindi \n MethodName:saveCreditAndCreditDetail");
+            throw new BusinessException("işlem başarısız oldu, yeniden deneyin.");
+        }
+
     }
 
     public Credit findCreditApprovalByTcknAndBirthDate(Long tckn,Date birthDate)

@@ -23,4 +23,11 @@ public class CreditController {
         return ApiResponse.success(userCreditDto);
     }
 
+    @GetMapping("/{tckn}")
+    public ApiResponse findUserCredit(@PathVariable Long tckn)
+    {
+        UserCreditDto userCreditDto= creditService.prepareUserCreditDtoForCreditApproval(tckn.toString());
+        return ApiResponse.success(userCreditDto);
+    }
+
 }

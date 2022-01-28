@@ -2,10 +2,13 @@ package com.lns.n11loanapplication.api.controller;
 
 
 import com.lns.n11loanapplication.api.errorHandling.response.ApiResponse;
+import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.data.dto.UserDto;
 import com.lns.n11loanapplication.engine.Consumer;
+import com.lns.n11loanapplication.service.CreditService;
 import com.lns.n11loanapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +21,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
+    @Autowired
+    private CreditService creditService;
     private final Consumer consumer;
 
     public UserController(Consumer consumer) {
@@ -37,13 +41,14 @@ public class UserController {
         return userService.findByUserTckn(tckn);
     }
 
+
     @PostMapping()
-    public UserDto save (@RequestBody UserDto userDto)
+    public ApiResponse save (@RequestBody UserDto userDto)
     {
         userDto=userService.save(userDto);
        consumer.publishCalculateCreditScoreEvent(userDto.getUserTckn().toString());
-       //TODO : UserCreditDto dönülecek
-        return userDto;
+        UserCreditDto userCreditDto=creditService.prepareUserCreditDtoForCreditApproval(userDto.getUserTckn(),userDto.getBirthDate());
+        return ApiResponse.success(userCreditDto);
     }
 
     @PutMapping

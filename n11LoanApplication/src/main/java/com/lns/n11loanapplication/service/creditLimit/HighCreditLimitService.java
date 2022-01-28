@@ -17,7 +17,7 @@ private BigDecimal calculatedCreditLimit;
         BigDecimal creditLimitRate = CreditsConstans.getCreditLimitRate();
         BigDecimal creditLimitRange =CreditsConstans.getCreditLimitRange();
         calculatedCreditLimit=super.getMonthlyIncome().multiply(creditLimitRate).divide(creditLimitRange);
-        if(super.getCollateralAmount()!=null && getCollateralAmount().compareTo(BigDecimal.ZERO)>0)
+        if(getCollateralAmount().compareTo(BigDecimal.ZERO)>0)
         {
             calculatedCreditLimit=calculatedCreditLimit.add(calculateCreditLimitWithColleteral(super.getCollateralAmount()));
         }

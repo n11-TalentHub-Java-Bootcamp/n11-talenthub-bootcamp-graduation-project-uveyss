@@ -37,4 +37,9 @@ UserRepository userRepository;
         Optional<User> user= userRepository.findById(id);
         return user.orElseGet(null);
     }
+
+    public void deleteByTckn(Long tckn)
+    {
+        userRepository.deleteByUserTckn(tckn);
+    }
 }

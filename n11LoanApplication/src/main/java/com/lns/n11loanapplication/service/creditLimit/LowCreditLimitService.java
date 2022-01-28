@@ -12,7 +12,7 @@ public class LowCreditLimitService extends CreditLimit{
     @Override
     public BigDecimal calculateCreditLimit(BigDecimal monthlyIncome) {
         calculatedCreditLimit= CreditsConstans.getLowCreditLimit();
-        if(super.getCollateralAmount()!=null && getCollateralAmount().compareTo(BigDecimal.ZERO)>0)
+        if(getCollateralAmount().compareTo(BigDecimal.ZERO)>0)
         {
             calculatedCreditLimit=calculatedCreditLimit.add(calculateCreditLimitWithColleteral(super.getCollateralAmount()));
         }

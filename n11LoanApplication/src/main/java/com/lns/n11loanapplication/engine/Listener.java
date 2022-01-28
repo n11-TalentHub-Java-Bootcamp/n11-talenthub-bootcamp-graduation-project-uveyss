@@ -3,6 +3,7 @@ package com.lns.n11loanapplication.engine;
 import com.lns.n11loanapplication.data.constants.CreditsConstans;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.service.CreditService;
+import com.lns.n11loanapplication.service.entityService.UserEntityService;
 import com.lns.n11loanapplication.service.informationService.SendMailService;
 import com.lns.n11loanapplication.service.informationService.SendSmsService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class Listener {
     SendMailService sendMailService;
     @Autowired
     SendSmsService sendSmsService;
+
+
     private  UserCreditDto userCreditDto;
 
     public UserCreditDto getUserCreditDto() {
@@ -51,7 +54,7 @@ public class Listener {
     public void calculateCreditScoreListener(@Payload String userTckn) {
         try {
                  setUserCreditDto(creditService.calculateCreditLimit(userTckn));
-                 sendSmsService.sendInformation(userCreditDto.getUserPhone().toString(), CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
+                 sendSmsService.sendInformation("+90"+userCreditDto.getUserPhone().toString(), CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
             }
             catch (Exception ex)
             {
@@ -62,7 +65,7 @@ public class Listener {
     @DltHandler
     public void dlt(String in, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         log.warn(in + " from " + topic);/*Yeni bir topic açılarak log gb olarak elastic search e basılabilir.*/
-        sendMailService.sendInformation(CreditsConstans.getKafkaAdminMail(), CreditsConstans.getSmsDidNotSend() + getUserCreditDto().getUserPhone());
+       // sendMailService.sendInformation(CreditsConstans.getKafkaAdminMail(), CreditsConstans.getSmsDidNotSend() + getUserCreditDto().getUserPhone());
     }
 
 }
