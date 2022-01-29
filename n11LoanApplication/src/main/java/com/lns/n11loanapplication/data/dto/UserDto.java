@@ -1,12 +1,15 @@
 package com.lns.n11loanapplication.data.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -18,15 +21,14 @@ public class UserDto implements Serializable {
 
     private String userName;
 
-    private String name;
+    private String fullName;
 
-    private String lastName;
 
     private Long userPhone;
 
     private Date recordDate;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 
     private BigDecimal montlyIncome;
 
@@ -48,11 +50,11 @@ public class UserDto implements Serializable {
         this.colleteralAmount = colleteralAmount;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -72,20 +74,12 @@ public class UserDto implements Serializable {
         this.userName = userName;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Long getUserPhone() {

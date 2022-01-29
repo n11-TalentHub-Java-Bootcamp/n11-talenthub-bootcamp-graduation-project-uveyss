@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.twilio.type.PhoneNumber;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
+import java.io.*;
+import java.util.regex.*;
 
 @Service()
 public class SendSmsService  implements ISendInformation
@@ -36,8 +38,11 @@ public class SendSmsService  implements ISendInformation
         }
     }
     private boolean isPhoneNumberValid(String phoneNumber) {
-        // TODO: Implement phone number validator
-        return true;
+        Pattern p = Pattern.compile("^\\d{10}$");
+        Matcher m = p.matcher(phoneNumber);
+
+        // Returning boolean value
+        return (m.matches());
     }
 
     @Override

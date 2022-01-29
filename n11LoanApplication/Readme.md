@@ -10,6 +10,7 @@
     işlem için log kaydı oluşturp death list çağrımı yapılmaktadır.
 
 #**Docker Notları**
+
     Docker ile ilgili proje dosyasında dockerfile oluşturulmuştur. proje çalışmasında containerlar oluşmazsa
     docker klasörü altında mongoDb ve kafka için compose.yml dosyaları mevcut bulunmaktadır. InteliJ kullanıyorsanız
     doğrudan inteliJ üzerinden çalıştırılabilir. diğer durumda docker-compose up komutu ile windows kullanıcıları için 
@@ -20,6 +21,11 @@
     değiştirebilirsiniz. aksi bir durum ile tekrar karşılaşmanız durumunda application.properties dosyası içerisinden
     localde uygulama olarak kurulu postgresql host,servername, kullanıcı adı ve şifre bilgilerini girerek uygulamayı çalıştırabilirsiniz.
 
-#**Kafka Notları**
+
+#**Önemli Not**
+    Twilo api için application properties üzerinde tanımlı token ile istek atıldığında token süresi doluyor.
+    çalıştırılmak istendiğinde yetkilendirme hatası alınıyor.
+    yerine mail servisini kullanabilir veya iletişime geçerek twilo için
+    kullanıcı adı ve şifremi paylaşabilirim.
 
 

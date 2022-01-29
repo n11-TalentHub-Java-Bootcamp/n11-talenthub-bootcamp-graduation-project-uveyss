@@ -1,9 +1,12 @@
 package com.lns.n11loanapplication.data.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -14,7 +17,9 @@ public class CreditDto {
     private Long creditId;
     private Date requestDate;
     private Long userTckn;
-    private Date birthDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     private byte creditStatus;
 
     public Long getCreditId() {
@@ -41,11 +46,11 @@ public class CreditDto {
         this.userTckn = user;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

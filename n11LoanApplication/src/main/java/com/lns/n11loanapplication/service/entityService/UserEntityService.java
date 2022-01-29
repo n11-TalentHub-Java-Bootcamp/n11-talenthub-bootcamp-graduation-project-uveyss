@@ -28,12 +28,12 @@ public class UserEntityService {
         return userDao.save(user);
     }
 
-    public void deletebyId (Long id)
+    public void deletebyId (String id)
     {
         userDao.deleteById(id);
     }
 
-    public User findUserById(Long id)
+    public User findUserById(String id)
     {
         return userDao.findUserById(id);
     }

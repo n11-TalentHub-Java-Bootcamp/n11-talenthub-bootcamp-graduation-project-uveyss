@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -26,9 +27,7 @@ public class Credit implements Serializable {
     @Column(name = "userTckn" ,nullable = false)
     private Long userTckn;
     @Column(name = "birthDate" ,nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    private LocalDate birthDate;
 
 
     @Column(name = "creditStatus" ,nullable = false)
@@ -42,11 +41,11 @@ public class Credit implements Serializable {
         this.creditStatus = creditStatus;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

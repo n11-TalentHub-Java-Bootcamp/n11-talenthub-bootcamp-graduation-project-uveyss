@@ -5,13 +5,17 @@ import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CreditScoreService {
 
-    public Long calculateCreditScore(UserCreditDto user){
-        Random r=new Random();
-        Long calculateLimit=Long.valueOf(650);
-        return calculateLimit;
+    public int calculateCreditScore(UserCreditDto user){
+
+        int minimum = 480;
+        int maksimum = 1100;
+
+        int randomSayi = ThreadLocalRandom.current().nextInt(minimum, maksimum + 1);
+        return randomSayi;
     }
 }

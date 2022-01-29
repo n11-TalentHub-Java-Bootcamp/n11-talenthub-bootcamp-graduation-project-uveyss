@@ -3,8 +3,10 @@ package com.lns.n11loanapplication.data.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Document(collection = "user")
@@ -17,11 +19,10 @@ public class User {
 
     private Long userTckn;
 
-    private String userName;
+    private String fullName;
 
-    private String lastName;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthDate;
+
+    private LocalDate birthDate;
     private Long userPhone;
 
     private Date recordDate;
@@ -55,15 +56,23 @@ public class User {
         this.montlyIncome = montlyIncome;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
     public String getName() {
         return name;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void setName(String name) {
@@ -78,21 +87,6 @@ public class User {
         this.userTckn = userTckn;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public Long getUserPhone() {
         return userPhone;

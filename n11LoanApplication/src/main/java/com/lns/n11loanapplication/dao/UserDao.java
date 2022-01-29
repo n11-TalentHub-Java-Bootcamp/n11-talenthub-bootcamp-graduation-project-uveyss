@@ -22,7 +22,7 @@ UserRepository userRepository;
         return userRepository.save(user);
     }
 
-    public void deleteById(Long id)
+    public void deleteById(String id)
     {
         userRepository.deleteById(id);
     }
@@ -32,7 +32,7 @@ UserRepository userRepository;
         return userRepository.findByUserTckn(userTckn);
     }
 
-    public User findUserById(Long id)
+    public User findUserById(String id)
     {
         Optional<User> user= userRepository.findById(id);
         return user.orElseGet(null);

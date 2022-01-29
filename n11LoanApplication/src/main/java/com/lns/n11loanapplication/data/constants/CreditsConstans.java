@@ -11,11 +11,20 @@ public  class CreditsConstans
     private static final BigDecimal creditLimitRate= BigDecimal.valueOf(4);
     private static final BigDecimal highLevelCollateralRate = BigDecimal.valueOf(0.25);
     private static final BigDecimal creditLimitRange = BigDecimal.valueOf(2);
+    private static final BigDecimal lowMonthlyIncome = BigDecimal.valueOf(5000);
+    private static final BigDecimal midMonthlyIncome = BigDecimal.valueOf(10000);
     private static final String creditLimitResultMessage="kredi başvurunuz olumlu sonuçlanmıştır. \n Limitiniz: ";
     private static final String creditLimitResult="tckn ye Kredi limiti atanmıştır. ";
     private static final String kafkaAdminMail ="doganvey@outlook.com";
     private static final String smsDidNotSend ="Kredi Onay bilgisi müşteriye gönderilemedi. müşteri telefon no: ";
 
+    public static BigDecimal getMidMonthlyIncome() {
+        return midMonthlyIncome;
+    }
+
+    public static BigDecimal getLowMonthlyIncome() {
+        return lowMonthlyIncome;
+    }
 
     public static String getKafkaAdminMail() {
         return kafkaAdminMail;

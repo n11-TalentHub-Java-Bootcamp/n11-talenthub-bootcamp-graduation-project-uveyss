@@ -5,10 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends MongoRepository<User,Long> {
+public interface UserRepository extends MongoRepository<User,String> {
 
     User findByUserTckn(Long tckn);
-
 
     void deleteByUserTckn(Long tckn);
 }

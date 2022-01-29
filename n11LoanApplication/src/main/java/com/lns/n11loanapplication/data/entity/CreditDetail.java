@@ -19,14 +19,14 @@ public class CreditDetail implements Serializable {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long creditDetailId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creditId")
     private Credit credit;
 
     @Column(name = "creditAmount" ,nullable = false)
     private BigDecimal creditAmount;
 
-    @Column(name = "colleteralAmount" ,nullable = false)
+    @Column(name = "colleteralAmount" ,nullable = true)
     private BigDecimal colleteralAmount;
 
 
@@ -35,8 +35,9 @@ public class CreditDetail implements Serializable {
 
     @Column(name = "creditApprovalDate" ,nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private Date creditApprovalDate;
+
+
 
     public Long getCreditDetailId() {
         return creditDetailId;

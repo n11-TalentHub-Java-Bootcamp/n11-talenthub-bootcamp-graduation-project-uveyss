@@ -5,11 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface CreditDetailRepository extends JpaRepository<CreditDetail,Long> {
 
-    @Query("select cd from CreditDetail cd where cd.credit.creditId=?1")
-    public Optional<CreditDetail> findAllByCreditId(Long creditId);
+
+@Query("select cd from CreditDetail cd where cd.credit.creditId = ?1")
+        CreditDetail findByCredit(Long creditId);
 }

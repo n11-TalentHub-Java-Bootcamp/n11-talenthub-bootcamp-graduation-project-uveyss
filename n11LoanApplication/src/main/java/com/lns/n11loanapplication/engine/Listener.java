@@ -2,8 +2,9 @@ package com.lns.n11loanapplication.engine;
 
 import com.lns.n11loanapplication.data.constants.CreditsConstans;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
+import com.lns.n11loanapplication.data.dto.UserDto;
 import com.lns.n11loanapplication.service.CreditService;
-import com.lns.n11loanapplication.service.entityService.UserEntityService;
+import com.lns.n11loanapplication.service.UserService;
 import com.lns.n11loanapplication.service.informationService.SendMailService;
 import com.lns.n11loanapplication.service.informationService.SendSmsService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +29,12 @@ public class Listener {
     @Autowired
     SendSmsService sendSmsService;
 
+    @Autowired
+    UserService userService;
+
 
     private  UserCreditDto userCreditDto;
-
-    public UserCreditDto getUserCreditDto() {
-        return userCreditDto;
-    }
-
-    public void setUserCreditDto(UserCreditDto userCreditDto) {
-        this.userCreditDto = userCreditDto;
-    }
+    private UserDto userDto;
 
     public Listener(CreditService creditService) {
         this.creditService = creditService;
@@ -53,8 +50,11 @@ public class Listener {
     @KafkaListener(topics = "${kafka.topic.calculateCreditScore}", groupId = "${kafka.groupId}")
     public void calculateCreditScoreListener(@Payload String userTckn) {
         try {
-                 setUserCreditDto(creditService.calculateCreditLimit(userTckn));
-                 sendSmsService.sendInformation("+90"+userCreditDto.getUserPhone().toString(), CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
+                userCreditDto=creditService.prepareUserCreditDtoForCreditApproval(Long.valueOf(userTckn));
+                 userDto = userService.findByUserTckn(Long.valueOf(userTckn));
+
+
+                 sendSmsService.sendInformation("+90"+userDto.getUserPhone().toString(), CreditsConstans.getCreditLimitResultMessage() + userCreditDto.getCreditAmount().toString());
             }
             catch (Exception ex)
             {

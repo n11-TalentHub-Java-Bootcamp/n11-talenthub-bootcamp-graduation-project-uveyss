@@ -12,14 +12,16 @@ import com.lns.n11loanapplication.data.dto.CreditDetailDto;
 import com.lns.n11loanapplication.data.dto.CreditDto;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
 import com.lns.n11loanapplication.data.entity.Credit;
+import com.lns.n11loanapplication.engine.Consumer;
 import com.lns.n11loanapplication.service.creditLimit.*;
 import com.lns.n11loanapplication.service.entityService.CreditEntityService;
+import com.lns.n11loanapplication.util.DateConverterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -28,7 +30,11 @@ public class CreditService {
     @Autowired
     CreditScoreService creditScoreService;
 
+    private final Consumer consumer;
 
+    public CreditService(Consumer consumer) {
+        this.consumer = consumer;
+    }
 
     @Autowired
     CreditDetailService creditDetailService;
@@ -57,31 +63,49 @@ public class CreditService {
         }
     }
 
-    public UserCreditDto prepareUserCreditDtoForCreditApproval(String userTckn)
+
+
+    public UserCreditDto prepareUserCreditDtoForCreditsApproval(String userTckn)
     {
         UserCreditDto userCreditDto =userService.findUserForCreditByTckn(Long.valueOf(userTckn));
-        Long creditScore = creditScoreService.calculateCreditScore(userCreditDto);
+        int creditScore = creditScoreService.calculateCreditScore(userCreditDto);
         userCreditDto.setCreditScore(creditScore);
         userCreditDto.setRequestDate(new Date(System.currentTimeMillis()));
         return userCreditDto;
     }
 
-    public UserCreditDto prepareUserCreditDtoForCreditApproval(Long tckn, Date birthDate)
+
+
+    public UserCreditDto prepareUserCreditDtoForCreditApproval(Long tckn, String birthDate)
     {
-        Credit credit =findCreditApprovalByTcknAndBirthDate(tckn,birthDate);
-       CreditDto creditDto =CreditConverter.INSTANCE.creditConvertToCreditDto(credit);
-       CreditDetailDto creditDetailDto = creditDetailService.findByCreditId(creditDto.getCreditId());
-       UserCreditDto userCreditDto =UserCreditConverter.INSTANCE.creditDtoConvertToUserCreditDto(creditDto);
-       userCreditDto.setCreditAmount(creditDetailDto.getCreditAmount());
-       userCreditDto.setColleteralAmount(creditDetailDto.getColleteralAmount());
-       userCreditDto.setCreditApprovalDate(creditDetailDto.getCreditApprovalDate());
-       userCreditDto.setCreditScore(creditDetailDto.getCreditScore());
-       return userCreditDto;
+        DateConverterUtil dateConverter = new DateConverterUtil();
+        LocalDate convertedDate =dateConverter.parseDate(birthDate);
+        Credit credit =findCreditApprovalByTcknAndBirthDate(tckn,convertedDate);
+        return getCreditInfo( credit);
+    }
+
+
+    public UserCreditDto prepareUserCreditDtoForCreditApproval(Long tckn)
+    {
+        Credit credit =creditEntityService.findByTckn(tckn);
+        return getCreditInfo( credit);
+    }
+
+    public UserCreditDto getCreditInfo(Credit credit)
+    {
+        CreditDto creditDto =CreditConverter.INSTANCE.creditConvertToCreditDto(credit);
+        CreditDetailDto creditDetailDto = creditDetailService.findByCreditId(creditDto.getCreditId());
+        UserCreditDto userCreditDto =UserCreditConverter.INSTANCE.creditDtoConvertToUserCreditDto(creditDto);
+        userCreditDto.setCreditAmount(creditDetailDto.getCreditAmount());
+        userCreditDto.setColleteralAmount(creditDetailDto.getColleteralAmount());
+        userCreditDto.setCreditApprovalDate(creditDetailDto.getCreditApprovalDate());
+        userCreditDto.setCreditScore(creditDetailDto.getCreditScore());
+        return userCreditDto;
     }
 
 
     public UserCreditDto calculateCreditLimit(String userTckn){
-        UserCreditDto userCreditDto =prepareUserCreditDtoForCreditApproval(userTckn);
+        UserCreditDto userCreditDto =prepareUserCreditDtoForCreditsApproval(userTckn);
         BigDecimal assignedLimit =BigDecimal.ZERO;
         CreditLimitAssignService creditLimitAssignService = CreditLimitAssignService.getInstance();
         if(userCreditDto.getCreditScore()<500)
@@ -92,11 +116,11 @@ public class CreditService {
         else if(userCreditDto.getCreditScore()<1000)
         {
 
-            if(userCreditDto.getMontlyIncome().compareTo(BigDecimal.valueOf(5000))<0)//TODO Maaş Oranları parametrik yapılacak.
+            if(userCreditDto.getMontlyIncome().compareTo(CreditsConstans.getLowMonthlyIncome())<0)
             {
                 assignedLimit = creditLimitAssignService.assignCreditLimit(new LowCreditLimitService(userCreditDto.getMontlyIncome()));
             }
-            else if(userCreditDto.getMontlyIncome().compareTo(BigDecimal.valueOf(10000))<0 )
+            else if(userCreditDto.getMontlyIncome().compareTo(CreditsConstans.getMidMonthlyIncome())<0 )
             {
                 assignedLimit = creditLimitAssignService.assignCreditLimit(new MidCreditLimitService(userCreditDto.getMontlyIncome()));
             }
@@ -113,10 +137,11 @@ public class CreditService {
         userCreditDto.setCreditAmount(assignedLimit);
         saveCreditAndCreditDetail(userCreditDto);
         log.info(userCreditDto.getUserTckn().toString()+" "+ CreditsConstans.getCreditLimitResult());
+        consumer.publishCalculateCreditScoreEvent(userCreditDto.getUserTckn().toString());
         return userCreditDto;
     }
 
-    @Transactional
+
     public void saveCreditAndCreditDetail(UserCreditDto userCreditDto)
     {
         try
@@ -137,7 +162,7 @@ public class CreditService {
 
     }
 
-    public Credit findCreditApprovalByTcknAndBirthDate(Long tckn,Date birthDate)
+    public Credit findCreditApprovalByTcknAndBirthDate(Long tckn,LocalDate birthDate)
     {
         Credit credit=creditEntityService.findUserByTcknAndBirthDate(tckn,birthDate);
         if(credit==null)

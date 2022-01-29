@@ -18,8 +18,13 @@ public class UserService {
 
     public List<UserDto> findAll()
     {
-        //todo : NULL KONTROLÜ
+
         List<User> userList =userEntityService.findAll();
+        if(userList==null || userList.size()<=0)
+        {
+            log.info("user not found. Method name:findAll");
+            throw new BusinessException("user-not-found");
+        }
         return UserConverter.INSTANCE.userListConvertToUserDtoList(userList);
     }
 
@@ -52,14 +57,19 @@ public class UserService {
 
         }
     }
-
-    public void delete (Long id)
+    public User findUserById(String id)
     {
         User user = userEntityService.findUserById(id);
         if(user==null)
         {
-            throw new BusinessException("user-not-found", id.toString());
+            throw new BusinessException("user-not-found", id);
         }
+        return user;
+    }
+
+    public void delete (String id)
+    {
+          findUserById(id);
         userEntityService.deletebyId(id);
     }
 

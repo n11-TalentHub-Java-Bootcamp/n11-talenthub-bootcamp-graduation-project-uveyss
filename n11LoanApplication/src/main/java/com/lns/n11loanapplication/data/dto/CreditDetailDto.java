@@ -17,7 +17,7 @@ public class CreditDetailDto {
     private Long creditDetailId;
     private BigDecimal creditAmount;
     private BigDecimal colleteralAmount;
-    private Long creditScore;
+    private int creditScore;
     private Date creditApprovalDate;
     private CreditDto credit;
 
@@ -54,11 +54,11 @@ public class CreditDetailDto {
         this.colleteralAmount = colleteralAmount;
     }
 
-    public Long getCreditScore() {
+    public int getCreditScore() {
         return creditScore;
     }
 
-    public void setCreditScore(Long creditScore) {
+    public void setCreditScore(int creditScore) {
         this.creditScore = creditScore;
     }
 

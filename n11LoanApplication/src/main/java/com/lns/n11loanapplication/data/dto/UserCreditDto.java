@@ -1,14 +1,17 @@
 package com.lns.n11loanapplication.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -19,9 +22,10 @@ public class UserCreditDto implements Serializable {
     private Long userTckn;
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date requestDate;
     @NotNull
     private BigDecimal creditAmount;
@@ -35,7 +39,7 @@ public class UserCreditDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private Date creditApprovalDate;
     @NotNull
-    private Long creditScore ;
+    private int creditScore ;
     @NotNull
     private BigDecimal montlyIncome;
     @NotNull
@@ -57,11 +61,11 @@ public class UserCreditDto implements Serializable {
         this.montlyIncome = montlyIncome;
     }
 
-    public Long getCreditScore() {
+    public int getCreditScore() {
         return creditScore;
     }
 
-    public void setCreditScore(Long creditScore) {
+    public void setCreditScore(int creditScore) {
         this.creditScore = creditScore;
     }
 
@@ -105,11 +109,11 @@ public class UserCreditDto implements Serializable {
         this.userTckn = userTckn;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
