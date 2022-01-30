@@ -7,7 +7,7 @@
     kredi başvuru limit  ve teminat gibi bilgiler yine docker üzerinde imajı bulunan postgresql üzerinde
     tutulmaktadır. mali işlemli kritik bir süreç olduğu için ilişkisel veritabanı üzerinde yönetiminin
     uygun olacağından dolayı ilişkisel veritabanı seçilmiştir.kafka işlem sırasında hata alırsa ilgili
-    işlem için log kaydı oluşturp death list çağrımı yapılmaktadır.
+    işlem için log kaydı oluşturp death letter çağrımı yapılmaktadır.
 
 #**Docker Notları**
 

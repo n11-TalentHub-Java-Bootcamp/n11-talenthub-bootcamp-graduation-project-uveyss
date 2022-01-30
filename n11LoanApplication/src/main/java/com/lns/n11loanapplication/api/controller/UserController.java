@@ -7,6 +7,7 @@ import com.lns.n11loanapplication.data.dto.UserDto;
 
 import com.lns.n11loanapplication.service.CreditService;
 import com.lns.n11loanapplication.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
+@CrossOrigin
 @RequestMapping("/users/")
 public class UserController {
 
@@ -32,7 +35,6 @@ public class UserController {
     }
 
     @GetMapping("{tckn}")
-    @CrossOrigin(origins = "*")
     public UserDto findByTckn(@Valid @PathVariable Long tckn)
     {
         return userService.findByUserTckn(tckn);
@@ -40,7 +42,6 @@ public class UserController {
 
 
     @PostMapping()
-    @CrossOrigin(origins = "*")
     public ApiResponse save (@Valid @RequestBody UserDto userDto)
     {
         userDto=userService.save(userDto);
@@ -49,7 +50,6 @@ public class UserController {
     }
 
     @PutMapping
-    @CrossOrigin(origins = "*")
     public ApiResponse update(@Valid @RequestBody UserDto userDto)
     {
         return ApiResponse.success(userService.save(userDto));

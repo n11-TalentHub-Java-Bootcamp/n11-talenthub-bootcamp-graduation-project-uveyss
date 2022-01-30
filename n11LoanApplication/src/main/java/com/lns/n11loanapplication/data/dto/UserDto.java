@@ -1,12 +1,12 @@
 package com.lns.n11loanapplication.data.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,19 +17,20 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserDto implements Serializable {
 
+    @NotNull
     private Long userTckn;
-
+    @NotNull
     private String userName;
-
+    @NotNull
     private String fullName;
 
-
+    @NotNull
     private Long userPhone;
-
+    @NotNull
     private Date recordDate;
-
+    @NotNull
     private LocalDate birthDate;
-
+    @NotNull
     private BigDecimal montlyIncome;
 
     private BigDecimal colleteralAmount;
