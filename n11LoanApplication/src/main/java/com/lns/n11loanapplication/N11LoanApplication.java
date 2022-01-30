@@ -10,4 +10,5 @@ public class N11LoanApplication {
         SpringApplication.run(N11LoanApplication.class, args);
     }
 
+
 }

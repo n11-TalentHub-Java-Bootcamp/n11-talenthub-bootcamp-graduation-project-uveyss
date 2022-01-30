@@ -25,12 +25,14 @@ public class UserController {
     private CreditService creditService;
 
     @GetMapping()
+    @CrossOrigin(origins = "*")
     public List<UserDto> findAll()
     {
         return  userService.findAll();
     }
 
     @GetMapping("{tckn}")
+    @CrossOrigin(origins = "*")
     public UserDto findByTckn(@Valid @PathVariable Long tckn)
     {
         return userService.findByUserTckn(tckn);
@@ -38,14 +40,16 @@ public class UserController {
 
 
     @PostMapping()
+    @CrossOrigin(origins = "*")
     public ApiResponse save (@Valid @RequestBody UserDto userDto)
     {
         userDto=userService.save(userDto);
-        UserCreditDto userCreditDto=creditService.calculateCreditLimit(userDto.getUserTckn().toString());
+        UserCreditDto userCreditDto=creditService.calculateCreditLimit(userDto);
         return ApiResponse.success(userCreditDto);
     }
 
     @PutMapping
+    @CrossOrigin(origins = "*")
     public ApiResponse update(@Valid @RequestBody UserDto userDto)
     {
         return ApiResponse.success(userService.save(userDto));
@@ -53,6 +57,7 @@ public class UserController {
 
 
     @PatchMapping
+    @CrossOrigin(origins = "*")
     public ApiResponse updateFields(@Valid @RequestBody UserDto userDto)
     {
         return ApiResponse.success(userService.save(userDto));
@@ -60,6 +65,7 @@ public class UserController {
 
 
     @DeleteMapping("{id}")
+    @CrossOrigin(origins = "*")
     public ApiResponse delete (@PathVariable String id)
     {
         userService.delete(id);
@@ -70,6 +76,7 @@ public class UserController {
     * entity admin tarafından kontrol edilebilmesi adına açıldı.
     * */
     @GetMapping("{id}")
+    @CrossOrigin(origins = "*")
     public ApiResponse findById(@PathVariable String id)
     {
         return ApiResponse.success(userService.findUserById(id));

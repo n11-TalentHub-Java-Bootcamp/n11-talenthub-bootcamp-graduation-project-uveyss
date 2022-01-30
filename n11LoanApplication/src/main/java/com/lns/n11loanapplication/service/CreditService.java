@@ -11,17 +11,20 @@ import com.lns.n11loanapplication.data.constants.CreditsConstans;
 import com.lns.n11loanapplication.data.dto.CreditDetailDto;
 import com.lns.n11loanapplication.data.dto.CreditDto;
 import com.lns.n11loanapplication.data.dto.UserCreditDto;
+import com.lns.n11loanapplication.data.dto.UserDto;
 import com.lns.n11loanapplication.data.entity.Credit;
 import com.lns.n11loanapplication.engine.Consumer;
 import com.lns.n11loanapplication.service.creditLimit.*;
 import com.lns.n11loanapplication.service.entityService.CreditEntityService;
 import com.lns.n11loanapplication.util.DateConverterUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
@@ -70,7 +73,8 @@ public class CreditService {
         UserCreditDto userCreditDto =userService.findUserForCreditByTckn(Long.valueOf(userTckn));
         int creditScore = creditScoreService.calculateCreditScore(userCreditDto);
         userCreditDto.setCreditScore(creditScore);
-        userCreditDto.setRequestDate(new Date(System.currentTimeMillis()));
+        java.util.Date requestDate=new java.util.Date();
+        userCreditDto.setRequestDate(requestDate);
         return userCreditDto;
     }
 
@@ -104,8 +108,11 @@ public class CreditService {
     }
 
 
-    public UserCreditDto calculateCreditLimit(String userTckn){
-        UserCreditDto userCreditDto =prepareUserCreditDtoForCreditsApproval(userTckn);
+    public UserCreditDto calculateCreditLimit(UserDto userDto){
+        UserCreditDto userCreditDto =prepareUserCreditDtoForCreditsApproval(userDto.getUserTckn().toString());
+        userCreditDto.setMontlyIncome(userCreditDto.getMontlyIncome());
+        userCreditDto.setColleteralAmount(userDto.getColleteralAmount());
+        userCreditDto.setUserPhone(userDto.getUserPhone());
         BigDecimal assignedLimit =BigDecimal.ZERO;
         CreditLimitAssignService creditLimitAssignService = CreditLimitAssignService.getInstance();
         if(userCreditDto.getCreditScore()<500)
@@ -129,6 +136,8 @@ public class CreditService {
                 assignedLimit = creditLimitAssignService.assignCreditLimit(new HighCreditLimitService(userCreditDto.getMontlyIncome()));
             }
             userCreditDto.setCreditStatus(CreditApprovalStatus.APPROVED.getApprovalStatus());
+            java.util.Date approvalDate=new java.util.Date();
+            userCreditDto.setCreditApprovalDate(approvalDate);
         }
         else
         {
