@@ -18,10 +18,10 @@ public class CreditController {
 
 
     @GetMapping("{tckn}/{birthDate}")
-    public ApiResponse findUserCredit(@Valid @PathVariable Long tckn, @Valid @PathVariable String birthDate)
+    public UserCreditDto findUserCredit(@Valid @PathVariable Long tckn, @Valid @PathVariable String birthDate)
     {
         UserCreditDto userCreditDto= creditService.prepareUserCreditDtoForCreditApproval(tckn,birthDate);
-        return ApiResponse.success(userCreditDto);
+        return userCreditDto;
     }
 
 
